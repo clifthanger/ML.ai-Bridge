@@ -1,0 +1,22 @@
+# runtime state — never commit
+__pycache__/
+*.pyc
+*.pyo
+.bridge.pid
+bridge.log
+crash.log
+tui_trace.txt
+
+# secrets and machine-specific exports
+share/
+keys.txt
+*.bak
+*.baktest
+*.orig
+.env.local
+.env.bak
+
+# NOTE: `.env` is tracked on purpose, and it is committed EMPTY.
+# The Get started wizard fills it in on your machine. It is listed here only as
+# a reminder of what must never appear inside it — the pre-commit hook refuses
+# the commit if a real key shows up.

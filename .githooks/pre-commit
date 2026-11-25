@@ -1,0 +1,44 @@
+#!/bin/sh
+# Refuse to commit credentials into this (public) repository.
+#
+# Enable once per clone:
+#     git config core.hooksPath .githooks
+#
+# Checks the staged content of every added/modified file.
+
+bad=0
+
+patterns='mlai_sk_[A-Za-z0-9]{16,}|sk-mlai-bridge-[0-9a-f]{16,}|mini-[0-9a-f-]{20,}\.[0-9a-f]{40,}|tf_live_[A-Za-z0-9_]{16,}|sk-[A-Za-z0-9]{32,}'
+
+for f in $(git diff --cached --name-only --diff-filter=ACM); do
+    [ -f "$f" ] || continue
+
+    case "$f" in
+        share/*|*keys.txt|*.bak|*.orig)
+            echo "pre-commit: BLOCKED  $f looks like a secrets export"
+            bad=1
+            continue
+            ;;
+    esac
+
+    if grep -nE "$patterns" "$f" >/dev/null 2>&1; then
+        echo "pre-commit: BLOCKED  $f contains what looks like a real key:"
+        grep -nE "$patterns" "$f" | sed 's/\(.\{110\}\).*/\1…/' | head -3
+        bad=1
+    fi
+done
+
+# .env must stay empty
+if git diff --cached --name-only --diff-filter=ACM | grep -qx '\.env'; then
+    if grep -qE '^[[:space:]]*MLAI_(API|BRIDGE)_KEY=[^[:space:]]' .env; then
+        echo "pre-commit: BLOCKED  .env has a value in it — it must be committed empty"
+        bad=1
+    fi
+fi
+
+if [ "$bad" -ne 0 ]; then
+    echo ""
+    echo "Commit refused. Keep .env empty and config.json free of keys/workspaces."
+    exit 1
+fi
+exit 0

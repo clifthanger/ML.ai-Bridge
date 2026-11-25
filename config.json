@@ -1,0 +1,20 @@
+{
+  "api_key": "",
+  "port": 20129,
+  "host": "127.0.0.1",
+  "workspaces": [],
+  "auto_create_workspace": true,
+  "max_concurrent": 2,
+  "poll_interval_s": 1.5,
+  "run_timeout_s": 600,
+  "slot_wait_s": 900,
+  "model_alias": "code",
+  "extra_models": [
+    "agent",
+    "opus-5.5r",
+    "pixis-opus"
+  ],
+  "max_task_chars": 28000,
+  "client_key": "",
+  "upstream": "https://code.ml.ai"
+}

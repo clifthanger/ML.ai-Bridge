@@ -441,6 +441,7 @@ mlai_console.py          the TUI console / launcher
 mlai_kit.py              keys, connection info, replication kit, Get started wizard
                          (python mlai_kit.py keys | export | get-started)
 ML AI Code.bat           one-click entry point (used by the desktop shortcut)
+find-python.bat          shared python finder for both .bat launchers
 install-shortcuts.ps1    creates the desktop icon, optional login autostart
 config.json              tuning + workspace tokens (committed with empty values)
 .env                     MLAI_API_KEY=…  committed EMPTY, filled in by the wizard
